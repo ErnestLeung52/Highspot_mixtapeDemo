@@ -1,5 +1,4 @@
 import { Mixtape, Playlist, RemovePlaylistAction } from '../types/interface';
-import { findPlaylistId } from '../validation/validateInput';
 
 export const removePlaylist = (
 	input: Mixtape,
@@ -8,26 +7,23 @@ export const removePlaylist = (
 	const { playlists } = input;
 	const { playlist_id } = actions;
 
-	const playlist: Playlist | undefined = findPlaylistId(playlists, playlist_id);
+	const toDeletePlaylistIndex = findPlaylistIndex(playlists, playlist_id);
 
-	// Validate playlist_id exist in mixtape
-	if (playlist === undefined) {
-		throw `playlist_id ${playlist_id} doese not exist in mixtape`;
+	// Check if playlist_id exists in mixtape
+	if (toDeletePlaylistIndex === -1) {
+		throw `Error: playlist_id (${playlist_id}) doese not exist in mixtape`;
+	} else {
+		playlists.splice(toDeletePlaylistIndex, 1);
+
+		console.log(
+			`Successfully removed playlist_id (${playlist_id}) from mixtape`
+		);
 	}
-
-	let deleteIndex: number | undefined;
-
-	playlists.forEach((playlist, index) => {
-		if (playlist.id === playlist_id) {
-			deleteIndex = index;
-		}
-	});
-
-	if (deleteIndex === undefined) {
-		return 'Cannot find playlist id';
-	}
-
-	playlists.splice(deleteIndex, 1);
 
 	return input;
+};
+
+// Helper function
+const findPlaylistIndex = (playlists: Playlist[], id: string) => {
+	return playlists.findIndex((playlist) => playlist.id === id);
 };
