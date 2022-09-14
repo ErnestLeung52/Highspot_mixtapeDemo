@@ -38,11 +38,13 @@ export interface RemovePlaylistAction {
 	playlist_id: string;
 }
 
-export type Actions = AddSongToPlaylistAction | AddPlaylistAction | RemovePlaylistAction;
+export type Actions =
+	| AddSongToPlaylistAction
+	| AddPlaylistAction
+	| RemovePlaylistAction;
 
-// **fix: interface -> enum
 export enum Action {
 	AddSongToPlaylistAction = 'add_song_to_playlist',
 	AddPlaylistAction = 'add_playlist',
-	RemovePlaylistAction = 'remove_playlist'
+	RemovePlaylistAction = 'remove_playlist',
 }
