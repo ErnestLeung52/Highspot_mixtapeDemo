@@ -7,17 +7,21 @@ export const removePlaylist = (
 	const { playlists } = input;
 	const { playlist_id } = actions;
 
-	const toDeletePlaylistIndex = findPlaylistIndex(playlists, playlist_id);
-
-	// Check if playlist_id exists in mixtape
-	if (toDeletePlaylistIndex === -1) {
-		throw `Error: playlist_id (${playlist_id}) doese not exist in mixtape`;
+	if (playlists.length === 0) {
+		console.log(`Warning: there is nothing to be removed (empty playlists)`);
 	} else {
-		playlists.splice(toDeletePlaylistIndex, 1);
+		const toDeletePlaylistIndex = findPlaylistIndex(playlists, playlist_id);
 
-		console.log(
-			`Successfully removed playlist_id (${playlist_id}) from mixtape`
-		);
+		// Check if playlist_id exists in mixtape
+		if (toDeletePlaylistIndex === -1) {
+			throw `Error: playlist_id (${playlist_id}) doese not exist in mixtape`;
+		} else {
+			playlists.splice(toDeletePlaylistIndex, 1);
+
+			console.log(
+				`Successfully removed playlist_id (${playlist_id}) from mixtape`
+			);
+		}
 	}
 
 	return input;
