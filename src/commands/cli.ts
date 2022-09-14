@@ -9,21 +9,12 @@ export const mixtapeCommand = new Command()
 	.option('-c, --changes <changes>', 'ingest changes file')
 	.option('-o, --output [output]', 'output data file', 'output.json')
 	.action((options: { data: string; changes: string; output: string }) => {
-		// try {
+		// Collect input/changes/output files' paths from CLI
 		const exampleFilePath = path.resolve(__dirname, '../../../example');
 		const mixtapePath = exampleFilePath + `/${options.data}`;
 		const changesPath = exampleFilePath + `/${options.changes}`;
 		const outputPath = exampleFilePath + `/${options.output}`;
 
+		// Process merging logics
 		mergeChanges(mixtapePath, changesPath, outputPath);
-		// } catch (error: any) {
-		// 	if (error.code === 'ENOENT') {
-		// 		console.error('No such file or directory');
-		// 	} else {
-		// 		console.log('Here is the problem: ', error.message);
-		// 	}
-		// 	process.exit(1);
-		// }
 	});
-
-// node dist/index.js mixtapeCLI -d mixtape.json -c changes.json -o output.json
