@@ -1,36 +1,101 @@
 import { removePlaylist } from '../src/actions/removePlaylist';
 import { Action, Mixtape, RemovePlaylistAction } from '../src/types/interface';
 
-test('remove a playlist', () => {
-	const mixtape: Mixtape = {
-		users: [{ id: '1', name: 'Albin Jaye' }],
-		playlists: [
-			{
-				id: '1',
-				owner_id: '2',
-				song_ids: ['1', '2'],
-			},
-			{
-				id: '2',
-				owner_id: '3',
-				song_ids: ['6', '8', '11'],
-			},
-		],
-		songs: [
-			{
-				id: '1',
-				artist: 'Camila Cabello',
-				title: 'Never Be the Same',
-			},
-		],
-	};
+describe('removePlaylist.test.ts', () => {
+	test('remove an existing playlist', () => {
+		const mixtape: Mixtape = {
+			users: [{ id: '1', name: 'Albin Jaye' }],
+			playlists: [
+				{
+					id: '1',
+					owner_id: '2',
+					song_ids: ['1', '2'],
+				},
+				{
+					id: '2',
+					owner_id: '3',
+					song_ids: ['6', '8', '11'],
+				},
+			],
+			songs: [
+				{
+					id: '1',
+					artist: 'Camila Cabello',
+					title: 'Never Be the Same',
+				},
+			],
+		};
 
-	const removePlaylistAction: RemovePlaylistAction = {
-		type: Action.RemovePlaylistAction,
-		playlist_id: '2',
-	};
+		const removePlaylistAction: RemovePlaylistAction = {
+			type: Action.RemovePlaylistAction,
+			playlist_id: '2',
+		};
 
-	removePlaylist(mixtape, removePlaylistAction);
+		console.log = jest.fn();
 
-	expect(mixtape.playlists.length).toBe(1);
+		removePlaylist(mixtape, removePlaylistAction);
+
+		expect(mixtape.playlists.length).toBe(1);
+		expect(console.log).toHaveBeenCalledWith(
+			`Successfully removed playlist_id (${removePlaylistAction.playlist_id}) from mixtape`
+		);
+	});
+
+	test('remove an invalid playlist', () => {
+		const mixtape: Mixtape = {
+			users: [{ id: '1', name: 'Albin Jaye' }],
+			playlists: [
+				{
+					id: '1',
+					owner_id: '2',
+					song_ids: ['1', '2'],
+				},
+			],
+			songs: [
+				{
+					id: '2',
+					artist: 'Camila Cabello',
+					title: 'Never Be the Same',
+				},
+			],
+		};
+
+		const removePlaylistAction: RemovePlaylistAction = {
+			type: Action.RemovePlaylistAction,
+			playlist_id: '2',
+		};
+
+		expect(mixtape.playlists[0].id).not.toBe(removePlaylistAction.playlist_id);
+		expect(() => removePlaylist(mixtape, removePlaylistAction)).toThrow(
+			`Error: playlist_id (${removePlaylistAction.playlist_id}) doese not exist in mixtape`
+		);
+	});
+
+	test('remove a playlist from empty playlists', () => {
+		const mixtape: Mixtape = {
+			users: [{ id: '1', name: 'Albin Jaye' }],
+			playlists: [],
+			songs: [
+				{
+					id: '2',
+					artist: 'Camila Cabello',
+					title: 'Never Be the Same',
+				},
+			],
+		};
+
+		const removePlaylistAction: RemovePlaylistAction = {
+			type: Action.RemovePlaylistAction,
+			playlist_id: '2',
+		};
+
+		console.log = jest.fn();
+
+		removePlaylist(mixtape, removePlaylistAction);
+
+		expect(mixtape.playlists.length).toBe(0);
+		expect(console.log).toHaveBeenCalledWith(
+			`Warning: there is nothing to be removed (empty playlists)`
+		);
+	});
 });
