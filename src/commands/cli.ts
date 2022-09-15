@@ -9,12 +9,11 @@ export const mixtapeCommand = new Command()
 	.option('-c, --changes <changes>', 'ingest changes file')
 	.option('-o, --output [output]', 'output data file', 'output.json')
 	.action((options: { data: string; changes: string; output: string }) => {
-		// Collect input/changes/output files' paths from CLI
-		const exampleFilePath = path.resolve(__dirname, '../../../example');
-		const mixtapePath = exampleFilePath + `/${options.data}`;
-		const changesPath = exampleFilePath + `/${options.changes}`;
-		const outputPath = exampleFilePath + `/${options.output}`;
+		// Collect input/changes/output files' names from CLI
+		const mixtapeName = options.data;
+		const changesName = options.changes;
+		const outputName = options.output;
 
 		// Process merging logics
-		mergeChanges(mixtapePath, changesPath, outputPath);
+		mergeChanges(mixtapeName, changesName, outputName);
 	});
