@@ -25,9 +25,9 @@ Select two files to merge changes Options:
   example: <br/>`node dist/index.js mixtapeCLI -d mixtape.json -c changes.json -o output.json`
 - The `output.json` will be saved in _example_ folder
 
-## Future Improvement
+## Future Improvement for Scalability
 
-**Scalability Limitation**
+**Current Limitation**
 The current V1.0.0 implementation uses multiple loops to iterate over the array structure in `mixtape.json` to perform CRUD. However, if the `mixtape.json` becomes very large, this approach will be very expensive and inefficient, leading to high CPU and memory usage.
 
 **Potential Solution V2.0.0** <br/> - Reconstruct input `mixtape.json` data structure
