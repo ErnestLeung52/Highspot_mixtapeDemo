@@ -16,16 +16,19 @@ export const addSongToPlaylist = (
 
 	// Check if playlist_id exists in mixtape
 	if (playlist === undefined) {
+		// handle error by either logging it or throwing the error
 		throw `Error: playlist_id (${playlist_id}) doese not exist in mixtape`;
 	}
 
 	// Check if song_id exists in mixtape
 	if (findSong(songs, song_id) === undefined) {
+		// handle error by either logging it or throwing the error
 		throw `Error: song_id (${song_id}) does not exist in mixtape`;
 	}
 
 	// Check if song_id is duplicated in playlist
 	if (isSongDuplicated(playlist, song_id) === true) {
+		// handle error by either logging it or throwing the error
 		console.log(
 			`Warning: song_id (${song_id}) is duplicated in playlist (${playlist_id})`
 		);
@@ -34,7 +37,7 @@ export const addSongToPlaylist = (
 	playlist.song_ids.push(song_id);
 
 	console.log(
-		`Succesfully added song_id (${song_id}) to playlist_id (${playlist_id})`
+		`Successfully added song_id (${song_id}) to playlist_id (${playlist_id})`
 	);
 
 	return input;

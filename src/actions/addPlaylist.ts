@@ -12,11 +12,13 @@ export const addPlaylist = (input: Mixtape, actions: AddPlaylistAction) => {
 
 	// Check new playlist should contain at least one song
 	if (song_ids.length === 0) {
+		// handle error by either logging it or throwing the error
 		throw `Error: Fail to add songs to playlist - empty song_ids in new playlist`;
 	}
 
 	// Check user_id exists in mixtape
 	if (findUserId(users, user_id) === undefined) {
+		// handle error by either logging it or throwing the error
 		throw `Error: user_id (${user_id}) does not exist in mixtape`;
 	}
 
@@ -25,6 +27,7 @@ export const addPlaylist = (input: Mixtape, actions: AddPlaylistAction) => {
 
 	// Check songs in newly added playlist exist in mixtape
 	if (absentSongsSet.length !== 0) {
+		// handle error by either logging it or throwing the error
 		throw `Error: song_ids (${absentSongsSet}) do not exist in mixtape`;
 	}
 
