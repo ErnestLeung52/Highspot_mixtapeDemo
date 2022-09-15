@@ -6,8 +6,8 @@ import {
 	Action,
 } from '../src/types/interface';
 
-describe('addSongToPlaylist.test.ts', () => {
-	test('add an existing song to an existing playlist', () => {
+describe('addSongToPlaylist.ts', () => {
+	test('successfully added an existing song to an existing playlist will display a log in console', () => {
 		const mixtape: Mixtape = {
 			users: [{ id: '1', name: 'Albin Jaye' }],
 			playlists: [
@@ -42,11 +42,11 @@ describe('addSongToPlaylist.test.ts', () => {
 		).toBe('3');
 		expect(mixtape.playlists[0].id).toBe('1');
 		expect(console.log).toHaveBeenCalledWith(
-			`Succesfully added song_id (${addSongAction.song_id}) to playlist_id (${addSongAction.playlist_id})`
+			`Successfully added song_id (${addSongAction.song_id}) to playlist_id (${addSongAction.playlist_id})`
 		);
 	});
 
-	test('add an existing song to an invalid playlist', () => {
+	test('adding an existing song to an invalid playlist will throw an error', () => {
 		const mixtape: Mixtape = {
 			users: [{ id: '1', name: 'Albin Jaye' }],
 			playlists: [
@@ -80,7 +80,7 @@ describe('addSongToPlaylist.test.ts', () => {
 		);
 	});
 
-	test('add an invalid song to an existing playlist', () => {
+	test('adding an invalid song to an existing playlist will throw an error', () => {
 		const mixtape: Mixtape = {
 			users: [{ id: '1', name: 'Albin Jaye' }],
 			playlists: [
@@ -114,7 +114,7 @@ describe('addSongToPlaylist.test.ts', () => {
 		);
 	});
 
-	test('add a duplicate song to an existing playlist', () => {
+	test('adding a duplicate song to an existing playlist will display a warning in console', () => {
 		const mixtape: Mixtape = {
 			users: [{ id: '1', name: 'Albin Jaye' }],
 			playlists: [
@@ -149,7 +149,7 @@ describe('addSongToPlaylist.test.ts', () => {
 			`Warning: song_id (${addSongAction.song_id}) is duplicated in playlist (${addSongAction.playlist_id})`
 		);
 		expect(console.log).toHaveBeenCalledWith(
-			`Succesfully added song_id (${addSongAction.song_id}) to playlist_id (${addSongAction.playlist_id})`
+			`Successfully added song_id (${addSongAction.song_id}) to playlist_id (${addSongAction.playlist_id})`
 		);
 	});
 });

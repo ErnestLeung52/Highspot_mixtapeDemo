@@ -1,8 +1,8 @@
 import { removePlaylist } from '../src/actions/removePlaylist';
 import { Action, Mixtape, RemovePlaylistAction } from '../src/types/interface';
 
-describe('removePlaylist.test.ts', () => {
-	test('remove an existing playlist', () => {
+describe('removePlaylist.ts', () => {
+	test('successfully removed an existing playlist will display a log in console', () => {
 		const mixtape: Mixtape = {
 			users: [{ id: '1', name: 'Albin Jaye' }],
 			playlists: [
@@ -41,7 +41,7 @@ describe('removePlaylist.test.ts', () => {
 		);
 	});
 
-	test('remove an invalid playlist', () => {
+	test('removing an invalid playlist will throw an error', () => {
 		const mixtape: Mixtape = {
 			users: [{ id: '1', name: 'Albin Jaye' }],
 			playlists: [
@@ -71,7 +71,7 @@ describe('removePlaylist.test.ts', () => {
 		);
 	});
 
-	test('remove a playlist from empty playlists', () => {
+	test('removing a playlist from empty playlists will display a warning in console', () => {
 		const mixtape: Mixtape = {
 			users: [{ id: '1', name: 'Albin Jaye' }],
 			playlists: [],

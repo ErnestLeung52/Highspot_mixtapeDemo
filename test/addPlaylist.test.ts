@@ -1,8 +1,8 @@
 import { addPlaylist } from '../src/actions/addPlaylist';
 import { Action, AddPlaylistAction, Mixtape } from '../src/types/interface';
 
-describe('addPlaylist.test.ts', () => {
-	test('add a new playlist with valid user and valid songs', () => {
+describe('addPlaylist.ts', () => {
+	test('successfully added a new playlist with a valid user and valid songs will display a log in console', () => {
 		const mixtape: Mixtape = {
 			users: [
 				{ id: '1', name: 'Albin Jaye' },
@@ -56,7 +56,7 @@ describe('addPlaylist.test.ts', () => {
 		);
 	});
 
-	test('add a new playlist with empty songs', () => {
+	test('adding a new playlist with empty songs will throw an error', () => {
 		const mixtape: Mixtape = {
 			users: [{ id: '1', name: 'Albin Jaye' }],
 			playlists: [
@@ -86,7 +86,7 @@ describe('addPlaylist.test.ts', () => {
 		);
 	});
 
-	test('add a new playlist with invalid user', () => {
+	test('adding a new playlist with an invalid user will throw an error', () => {
 		const mixtape: Mixtape = {
 			users: [
 				{ id: '1', name: 'Albin Jaye' },
@@ -137,7 +137,7 @@ describe('addPlaylist.test.ts', () => {
 		);
 	});
 
-	test('add a new playlist with one invalid song', () => {
+	test('adding a new playlist with one invalid song will throw an error', () => {
 		const mixtape: Mixtape = {
 			users: [
 				{ id: '1', name: 'Albin Jaye' },
@@ -186,7 +186,7 @@ describe('addPlaylist.test.ts', () => {
 		);
 	});
 
-	test('add a new playlist with multiple invalid songs', () => {
+	test('adding a new playlist with multiple invalid songs will throw an error', () => {
 		const mixtape: Mixtape = {
 			users: [
 				{ id: '1', name: 'Albin Jaye' },
@@ -234,7 +234,7 @@ describe('addPlaylist.test.ts', () => {
 		);
 	});
 
-	test('add a new playlist with some valid and invalid songs', () => {
+	test('adding a new playlist with some valid and invalid songs will throw an error', () => {
 		const mixtape: Mixtape = {
 			users: [
 				{ id: '1', name: 'Albin Jaye' },
