@@ -13,24 +13,29 @@ import { removePlaylist } from './actions/removePlaylist';
 import path from 'path';
 
 export const mergeChanges = (
-	mixTapeFilePath: string,
-	changesFilePath: string,
-	outputFilePath: string
+	mixTapeFileName: string,
+	changesFileName: string,
+	outputFileName: string
 ) => {
-	// Read and parse mixtape & changes json file
+	// Find example folder's absolute path
+	const exampleFolderPath = path.resolve(__dirname, '../../example');
 
-	const rawMixtapeData = fs.readFileSync(mixTapeFilePath);
-	const rawChangesActions = fs.readFileSync(changesFilePath);
+	const mixtapePath = path.join(exampleFolderPath, mixTapeFileName);
+	const changesPath = path.join(exampleFolderPath, changesFileName);
+
+	// Read and parse mixtape & changes json file
+	const rawMixtapeData = fs.readFileSync(mixtapePath);
+	const rawChangesActions = fs.readFileSync(changesPath);
 
 	const mixtapeData: Mixtape = JSON.parse(rawMixtapeData.toString());
 	const changesActions: Actions[] = JSON.parse(rawChangesActions.toString());
 
 	// Check if input files are empty
 	if (Object.entries(mixtapeData).length === 0) {
-		throw `File ${mixTapeFilePath} is empty! Unprocessable Entity.`;
+		throw `File ${mixTapeFileName} is empty! Unprocessable Entity.`;
 	}
 	if (Object.entries(changesActions).length === 0) {
-		throw `File ${changesFilePath} is empty! Unprocessable Entity.`;
+		throw `File ${changesFileName} is empty! Unprocessable Entity.`;
 	}
 
 	// Execute an action based on the each changes' type
@@ -53,27 +58,53 @@ export const mergeChanges = (
 		}
 	});
 
-	console.log(mixtapeData.playlists);
+	const outputJSON = JSON.stringify(mixtapeData, null, 2);
 
-	const outputJSON = JSON.stringify(mixtapeData);
+	const outputFilePath = joinPath(exampleFolderPath, outputFileName);
 
-	const writeFile = (filePath: string, content: string) => {
-		fs.writeFile(
-			filePath,
-			content,
-			{ encoding: 'utf-8', flag: 'wx' },
-			(err) => {
-				if (err) {
-					console.log('File ' + filePath + ' already exists, testing next');
-					let fileName = filePath.replace(/.json/g, '');
-					let number = 0;
-					fileName = fileName + 1;
-					writeFile(filePath, content);
-				} else {
-					console.log('Successfully written ' + filePath);
-				}
-			}
-		);
-	};
-	writeFile(outputFilePath, outputJSON);
+	// Write output JSON file to example folder
+	writeOutputToExample(
+		outputFilePath,
+		outputFileName,
+		exampleFolderPath,
+		outputJSON
+	);
+};
+
+// Helper Functions
+const joinPath = (dir: string, fileName: string) => {
+	return path.join(dir, fileName);
+};
+
+// Rename file if file already exists in example folder
+const renameOutputFile = (fileName: string) => {
+	const fileNameWithoutExt = fileName.replace(/.json/g, '');
+	const fileNameLetters = fileNameWithoutExt.replace(/[^a-z]/gi, '');
+	const newDigits = Number(fileNameWithoutExt.replace(/\D/g, '')) + 1;
+	const newFileName = fileNameLetters + newDigits + '.json';
+
+	return newFileName;
+};
+
+// Handle duplicate files name when writing file to local
+const writeOutputToExample = (
+	fileNamePath: string,
+	fileName: string,
+	folderPath: string,
+	data: string
+) => {
+	// Write to example folder file
+	fs.writeFile(fileNamePath, data, { encoding: 'utf-8', flag: 'wx' }, (err) => {
+		if (err) {
+			console.log(`File ${fileName} already exists, testing next`);
+
+			const newFileName = renameOutputFile(fileName);
+
+			const newFileOutputPath = joinPath(folderPath, newFileName);
+
+			writeOutputToExample(newFileOutputPath, newFileName, folderPath, data);
+		} else {
+			console.log(`Successfully written ${fileName}`);
+		}
+	});
 };
