@@ -10,25 +10,33 @@ import {
 import { addPlaylist } from './actions/addPlaylist';
 import { addSongToPlaylist } from './actions/addSongToPlaylist';
 import { removePlaylist } from './actions/removePlaylist';
+import path from 'path';
 
 export const mergeChanges = (
 	mixTapeFilePath: string,
 	changesFilePath: string,
 	outputFilePath: string
 ) => {
-	// Read and parse Mixtape json file
-	const rawMixtapeData = fs.readFileSync(mixTapeFilePath);
-	const mixtapeData: Mixtape = JSON.parse(rawMixtapeData.toString());
+	// Read and parse mixtape & changes json file
 
-	// Read and parse Changes json file
+	const rawMixtapeData = fs.readFileSync(mixTapeFilePath);
 	const rawChangesActions = fs.readFileSync(changesFilePath);
+
+	const mixtapeData: Mixtape = JSON.parse(rawMixtapeData.toString());
 	const changesActions: Actions[] = JSON.parse(rawChangesActions.toString());
 
-	// go through each action and execute a method based on the change type
+	// Check if input files are empty
+	if (Object.entries(mixtapeData).length === 0) {
+		throw `File ${mixTapeFilePath} is empty! Unprocessable Entity.`;
+	}
+	if (Object.entries(changesActions).length === 0) {
+		throw `File ${changesFilePath} is empty! Unprocessable Entity.`;
+	}
+
+	// Execute an action based on the each changes' type
 	changesActions.forEach((changeAction: Actions) => {
 		switch (changeAction.type) {
 			case Action.AddSongToPlaylistAction:
-				// Type-Casting
 				return addSongToPlaylist(
 					mixtapeData,
 					<AddSongToPlaylistAction>changeAction
@@ -41,12 +49,31 @@ export const mergeChanges = (
 				return removePlaylist(mixtapeData, <RemovePlaylistAction>changeAction);
 
 			default:
-				return 'Action does not exist!';
+				throw `Error: Type ${changeAction.type} does not exist!`;
 		}
 	});
 
 	console.log(mixtapeData.playlists);
 
-	// const outputJSON = JSON.stringify(mixtapeData);
-	// fs.writeFileSync(outputFilePath, outputJSON);
+	const outputJSON = JSON.stringify(mixtapeData);
+
+	const writeFile = (filePath: string, content: string) => {
+		fs.writeFile(
+			filePath,
+			content,
+			{ encoding: 'utf-8', flag: 'wx' },
+			(err) => {
+				if (err) {
+					console.log('File ' + filePath + ' already exists, testing next');
+					let fileName = filePath.replace(/.json/g, '');
+					let number = 0;
+					fileName = fileName + 1;
+					writeFile(filePath, content);
+				} else {
+					console.log('Successfully written ' + filePath);
+				}
+			}
+		);
+	};
+	writeFile(outputFilePath, outputJSON);
 };
