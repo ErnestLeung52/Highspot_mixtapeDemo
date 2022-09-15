@@ -2,7 +2,7 @@ import { addPlaylist } from '../src/actions/addPlaylist';
 import { Action, AddPlaylistAction, Mixtape } from '../src/types/interface';
 
 describe('addPlaylist.ts', () => {
-	test('successfully added a new playlist with a valid user and valid songs will display a log in console', () => {
+	test('successfully added a new playlist with a valid user and valid songs will be logged', () => {
 		const mixtape: Mixtape = {
 			users: [
 				{ id: '1', name: 'Albin Jaye' },

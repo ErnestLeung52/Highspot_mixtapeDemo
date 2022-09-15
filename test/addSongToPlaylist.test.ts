@@ -7,7 +7,7 @@ import {
 } from '../src/types/interface';
 
 describe('addSongToPlaylist.ts', () => {
-	test('successfully added an existing song to an existing playlist will display a log in console', () => {
+	test('successfully added an existing song to an existing playlist will be logged', () => {
 		const mixtape: Mixtape = {
 			users: [{ id: '1', name: 'Albin Jaye' }],
 			playlists: [
@@ -114,7 +114,7 @@ describe('addSongToPlaylist.ts', () => {
 		);
 	});
 
-	test('adding a duplicate song to an existing playlist will display a warning in console', () => {
+	test('adding a duplicate song to an existing playlist will be logged', () => {
 		const mixtape: Mixtape = {
 			users: [{ id: '1', name: 'Albin Jaye' }],
 			playlists: [

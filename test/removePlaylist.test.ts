@@ -2,7 +2,7 @@ import { removePlaylist } from '../src/actions/removePlaylist';
 import { Action, Mixtape, RemovePlaylistAction } from '../src/types/interface';
 
 describe('removePlaylist.ts', () => {
-	test('successfully removed an existing playlist will display a log in console', () => {
+	test('successfully removed an existing playlist will be logged', () => {
 		const mixtape: Mixtape = {
 			users: [{ id: '1', name: 'Albin Jaye' }],
 			playlists: [
@@ -71,7 +71,7 @@ describe('removePlaylist.ts', () => {
 		);
 	});
 
-	test('removing a playlist from empty playlists will display a warning in console', () => {
+	test('removing a playlist from empty playlists will be logged', () => {
 		const mixtape: Mixtape = {
 			users: [{ id: '1', name: 'Albin Jaye' }],
 			playlists: [],
